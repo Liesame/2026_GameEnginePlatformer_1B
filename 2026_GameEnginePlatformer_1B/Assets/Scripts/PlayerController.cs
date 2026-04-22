@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
 
-    public float moveSpeed = 5f;
-    public float jumpForce = 5f;
+    public float moveSpeed = 3f;
+    public float jumpForce = 3f;
     public Transform groundCheck;
     public LayerMask groundLayer;
 
@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     private float moveInput;
 
     private bool isGiant = false;
+    private bool isSpeed = false;
+    private bool isJump = false;
 
     private void Awake()
     {
@@ -48,7 +50,25 @@ public class PlayerController : MonoBehaviour
             else if (moveInput > 0)
                 transform.localScale = new Vector3(-1, 1, 1);
         }
-        
+
+        if (isSpeed)
+        {
+            moveSpeed = 5f;
+        }
+        else
+        {
+            moveSpeed = 3f;
+        }
+
+        if (isJump)
+        {
+            jumpForce = 5f;
+        }
+        else
+        {
+            jumpForce = 3f;
+        }
+
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
@@ -95,11 +115,35 @@ public class PlayerController : MonoBehaviour
             Invoke(nameof(ResetGiant), 3f);
             Destroy(collision.gameObject);
         }
+
+        if (collision.CompareTag("speed"))
+        {
+            isSpeed = true;
+            Invoke(nameof(ResetSpeed), 3f);
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.CompareTag("jump"))
+        {
+            isJump = true;
+            Invoke(nameof(ResetJump), 3f);
+            Destroy(collision.gameObject);
+        }
     }
 
     void ResetGiant()
     {
         isGiant = false;
+    }
+
+    void ResetSpeed()
+    {
+        isSpeed = false;
+    }
+
+    void ResetJump()
+    {
+        isJump = false;
     }
 
 }
