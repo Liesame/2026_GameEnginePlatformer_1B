@@ -10,6 +10,7 @@ TagManager:
   - Item
   - speed
   - jump
+  - leaderscore
   layers:
   - Default
   - TransparentFX

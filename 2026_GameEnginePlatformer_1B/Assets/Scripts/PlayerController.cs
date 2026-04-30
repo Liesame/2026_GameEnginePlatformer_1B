@@ -19,10 +19,13 @@ public class PlayerController : MonoBehaviour
     private bool isSpeed = false;
     private bool isJump = false;
 
+    float score;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         pAni = GetComponent<Animator>();
+        score = 0f;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -98,6 +101,8 @@ public class PlayerController : MonoBehaviour
 
         if (collision.CompareTag("Finish"))
         {
+            HighScore.TrySet(SceneManager.GetActiveScene().buildIndex, (int)score);
+
             collision.GetComponent<LevelObject>().MoveToNextLevel();
         }
 
@@ -127,6 +132,12 @@ public class PlayerController : MonoBehaviour
         {
             isJump = true;
             Invoke(nameof(ResetJump), 3f);
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.CompareTag("leaderscore"))
+        {
+            score += 10f;
             Destroy(collision.gameObject);
         }
     }
